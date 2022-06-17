@@ -1,0 +1,150 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<main class="container-fluid">
+
+
+    <h1 class="text-center mb-4">Liste des employés</h1>
+
+    {# Boites de message pour l'ajout, et la suppression d'employés #}
+    {% for message in app.flashes("message_ajout") %}
+        <div class="container alert alert-success text-center">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes("efface_bon") %}
+        <div class="container alert alert-success text-center">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes("efface_err") %}
+        <div class="container alert alert-danger text-center">{{ message }}</div>
+    {% endfor %}
+
+
+    <section class="my-5">
+        <table class="table table-hover table-striped-columns">
+            {# En-tête du tableau #}
+            <thead>
+                <tr class="table-primary text-center align-middle">
+                    <th style="min-width: 2%">#</i></th>
+                    <th style="min-width: 6%">Prénom</th>
+                    <th style="min-width: 6%">Nom</th>
+                    <th style="min-width: 7%">Téléphone</th>
+                    <th style="min-width:10%">Email</th>
+                    <th style="min-width:15%">Adresse</th>
+                    <th style="min-width:10%">Poste</th>
+                    <th style="min-width: 2%">Salaire</th>
+                    <th style="min-width:10%">Date de Naissance</th>
+                    <th style="min-width: 7%">Option</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for employe in employes %}
+                {% if id is defined and employe.id == id %}
+                {# Changement de style pour la ligne en cours de modification avec option d'annulation #}
+                <tr class="text-center align-middle bg-success bg-gradient bg-opacity-50" id="{{ employe.id }}">
+                    <td scope="row">{{ employe.id }}</td>
+                    <td>{{ employe.prenom }}</td>
+                    <td>{{ employe.nom }}</td>
+                    {# Affichage du numéro de téléphone sous la forme "00 00 00 00 00" #}
+                    <td>{{ employe.telephone | slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                    <td>{{ employe.email }}</td>
+                    <td>{{ employe.adresse }}</td>
+                    <td>{{ employe.poste }}</td>
+                    <td>{{ employe.salaire }}</td>
+                    {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
+                    <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
+                    <td>
+                        <a href="{{ path("home") }}#{{ id }}" class="btn btn-sm btn-success" title="Annuler modifications">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                {# Style classique du tableau avec option modification et suppression #}
+                <tr class="text-center align-middle" id="{{ employe.id }}">
+                    <td scope="row">{{ employe.id }}</td>
+                    <td>{{ employe.prenom }}</td>
+                    <td>{{ employe.nom }}</td>
+                    {# Affichage du numéro de téléphone sous la forme "00 00 00 00 00" #}
+                    <td>{{ employe.telephone | slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                    <td>{{ employe.email }}</td>
+                    <td>{{ employe.adresse }}</td>
+                    <td>{{ employe.poste }}</td>
+                    <td>{{ employe.salaire }}</td>
+                    {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
+                    <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
+                    <td>
+                        <a href="{{ path("update", {"id": employe.id}) }}#formulaire" class="btn btn-sm btn-warning text-dark" title="Modifier les informations de l'employé {{ employe.id }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{{ path("delete", {"id": employe.id}) }}" class="btn btn-sm btn-danger text-dark" title="Supprimer les informations de l'employé {{ employe.id }}">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endif %}
+            {% else %}
+            {# Affichage en cas de liste d'employés vide #}
+                <tr class="text-center align-middle">
+                    <td colspan="10">Aucun employé pour l'instant</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    {# Barre de séparation #}
+    <hr class="w-25 mx-auto my-5">
+
+    {# Sous-titre auto-modifié #}
+    <h3 class="text-center mb-4 mt-5 pt-5" id="formulaire">{{ id is defined ? "Modifier l'employé " ~ id : "Ajouter un employé" }}</h3>
+
+    {# Boites de message pour la modification d'employés #}
+    {% for message in app.flashes("maj_bon") %}
+        <div class="container alert alert-success text-center">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes("maj_err") %}
+        <div class="container alert alert-danger text-center">{{ message }}</div>
+    {% endfor %}
+
+    {# Affichage du formulaire sur 3 lignes #}
+    <section class="container my-5 pb-5">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-3">
+                {{ form_row(form.prenom) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.nom) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.telephone) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.email) }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                {{ form_row(form.adresse) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                {{ form_row(form.poste) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.salaire) }}
+            </div>
+            <div class="col-3">
+                {{ form_row(form.datedenaissance) }}
+            </div>
+            <div class="col-3">
+                {{ form_rest(form) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </section>
+
+</main>
+{% endblock %}
