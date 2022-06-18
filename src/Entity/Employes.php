@@ -5,10 +5,20 @@ namespace App\Entity;
 
 use App\Repository\EmployesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+//  Vérification pour savoir si l'email et le numéro de téléphone sont uniques
 #[ORM\Entity(repositoryClass: EmployesRepository::class)]
+#[UniqueEntity(
+    fields: "email",
+    message: "Email déjà utilisé."
+)]
+#[UniqueEntity(
+    fields: "telephone",
+    message: "Numéro de téléphone déjà utilisé."
+)]
 class Employes
 {
     #[ORM\Id]
@@ -41,7 +51,7 @@ class Employes
     //  Vérifications variable telephone
     //  longueur 10 chiffres
     //  Numéro étant un nombre positif et commencant obligatoirement par 0
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: 'string', length: 10, unique: true)]
     #[Assert\Regex(pattern: "/^[0-9]+$/")]
     #[Assert\Length(
         min: 10,
@@ -56,7 +66,7 @@ class Employes
     private $telephone;
 
     //  Vérifications variable email
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\Email(message: "L'email n'est pas valide")]
     private $email;
 
