@@ -4,7 +4,7 @@
 <main class="container-fluid">
 
 
-    <h1 class="text-center mb-4">Liste des employés</h1>
+    <h1 class="text-center mb-4 fw-semibold text-decoration-underline fs-2">Liste des employés</h1>
 
     {# Boites de message pour l'ajout, et la suppression d'employés #}
     {% for message in app.flashes("message_ajout") %}
@@ -19,20 +19,20 @@
 
 
     <section class="my-5">
-        <table class="table table-hover table-striped-columns">
+        <table class="table table-sm table-hover table-striped-columns">
             {# En-tête du tableau #}
             <thead>
                 <tr class="table-primary text-center align-middle">
-                    <th style="min-width: 2%">#</i></th>
-                    <th style="min-width: 6%">Prénom</th>
-                    <th style="min-width: 6%">Nom</th>
-                    <th style="min-width: 7%">Téléphone</th>
-                    <th style="min-width:10%">Email</th>
-                    <th style="min-width:15%">Adresse</th>
-                    <th style="min-width:10%">Poste</th>
-                    <th style="min-width: 2%">Salaire</th>
-                    <th style="min-width:10%">Date de Naissance</th>
-                    <th style="min-width: 7%">Option</th>
+                    <th scope="col" style="min-width: 2%">#</i></th>
+                    <th scope="col" style="min-width: 6%">Prénom</th>
+                    <th scope="col" style="min-width: 6%">Nom</th>
+                    <th scope="col" style="min-width: 7%">Téléphone</th>
+                    <th scope="col" style="min-width:10%">Email</th>
+                    <th scope="col" style="min-width:15%">Adresse</th>
+                    <th scope="col" style="min-width:10%">Poste</th>
+                    <th scope="col" style="min-width: 2%">Salaire</th>
+                    <th scope="col" style="min-width:10%">Date de Naissance</th>
+                    <th scope="col" style="min-width: 7%">Option</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,10 +92,10 @@
     </section>
 
     {# Barre de séparation #}
-    <hr class="w-25 mx-auto my-5">
+    <hr class="w-25 mx-auto my-5 text-danger">
 
     {# Sous-titre auto-modifié #}
-    <h3 class="text-center mb-4 mt-5 pt-5" id="formulaire">{{ id is defined ? "Modifier l'employé " ~ id : "Ajouter un employé" }}</h3>
+    <h2 class="text-center mb-4 mt-5 pt-5 fw-semibold text-decoration-underline fs-4" id="formulaire">{{ id is defined ? "Modifier l'employé " ~ id : "Ajouter un employé" }}</h2>
 
     {# Boites de message pour la modification d'employés #}
     {% for message in app.flashes("maj_bon") %}
@@ -145,6 +145,12 @@
         </div>
         {{ form_end(form) }}
     </section>
-
+    <div class="position-fixed bottom-0 end-0 mb-3 me-3 opacity-75">
+    {% if id is defined %}
+        <a href="#formulaire" class="btn btn-sm btn-success rounded-circle" title="Retourner sur la modification du formulaire"><i class="bi bi-box-arrow-down"></i></a>
+        <a href="#{{ id }}" class="btn btn-sm btn-success rounded-circle" title="Voir ligne en cours de modification"><i class="bi bi-box-arrow-in-up"></i></a>
+    {% endif %}
+        <a href="#top" class="btn btn-sm btn-info rounded-circle" title="Haut de la page"><i class="bi bi-arrow-bar-up"></i></a>
+    </div>
 </main>
 {% endblock %}
