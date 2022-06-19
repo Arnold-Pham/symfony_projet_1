@@ -53,10 +53,10 @@
 
                     {# Affichage du numéro de téléphone sous la forme "00 00 00 00 00" #}
                     {# Formatage du numéro pour à cause de l'insersion en base de données #}
-                    {% if employe.telephone| length == 9 %}
-                        <td>{{ "0" ~ employe.telephone| slice(0, 1) ~ " " ~ employe.telephone| slice(1, 2) ~ " " ~ employe.telephone| slice(3, 2) ~ " " ~ employe.telephone| slice(5, 2) ~ " " ~ employe.telephone| slice(7, 2) }}</td>
+                    {% if employe.telephone|length == 9 %}
+                        <td>{{ "0" ~ employe.telephone|slice(0, 1) ~ " " ~ employe.telephone|slice(1, 2) ~ " " ~ employe.telephone|slice(3, 2) ~ " " ~ employe.telephone|slice(5, 2) ~ " " ~ employe.telephone|slice(7, 2) }}</td>
                     {% else %}
-                        <td>{{ employe.telephone| slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                        <td>{{ employe.telephone|slice(0, 2) ~ " " ~ employe.telephone|slice(2, 2) ~ " " ~ employe.telephone|slice(4, 2) ~ " " ~ employe.telephone|slice(6, 2) ~ " " ~ employe.telephone|slice(8, 2) }}</td>
                     {% endif %}
                     <td>{{ employe.email }}</td>
                     <td>{{ employe.adresse }}</td>
@@ -64,7 +64,7 @@
                     <td>{{ employe.salaire }}</td>
 
                     {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
-                    <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
+                    <td>{{ employe.datedenaissance|date("d/m/Y") }}</td>
 
                     {# Boutons option, en cas de modification #}
                     {% if id is defined and employe.id == id %}
