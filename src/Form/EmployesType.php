@@ -65,7 +65,10 @@ class EmployesType extends AbstractType
                     "title" => "Ajouter une adresse",
                     "class" => "bg-primary bg-opacity-10 fw-semibold"
                 ],
-                "attr" => ["placeholder" => "Saisir Adresse", "rows" => 2]
+                "attr" => [
+                    "placeholder" => "Saisir Adresse",
+                    "rows" => 2
+                ]
             ])
             ->add('poste', null, [
                 "label" => "Poste",
