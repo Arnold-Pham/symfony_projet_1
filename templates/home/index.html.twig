@@ -3,7 +3,6 @@
 {% block body %}
 <main class="container-fluid">
 
-
     <h1 class="text-center mb-4 fw-semibold text-decoration-underline fs-2">Liste des employés</h1>
 
     {# Boites de message pour l'ajout, et la suppression d'employés #}
@@ -17,72 +16,92 @@
         <div class="container alert alert-danger text-center">{{ message }}</div>
     {% endfor %}
 
-
     <section class="my-5">
         <table class="table table-sm table-hover table-striped-columns">
+
             {# En-tête du tableau #}
             <thead>
                 <tr class="table-primary text-center align-middle">
-                    <th scope="col" style="min-width: 2%">#</i></th>
-                    <th scope="col" style="min-width: 6%">Prénom</th>
-                    <th scope="col" style="min-width: 6%">Nom</th>
-                    <th scope="col" style="min-width: 7%">Téléphone</th>
-                    <th scope="col" style="min-width:10%">Email</th>
-                    <th scope="col" style="min-width:15%">Adresse</th>
-                    <th scope="col" style="min-width:10%">Poste</th>
-                    <th scope="col" style="min-width: 2%">Salaire</th>
-                    <th scope="col" style="min-width:10%">Date de Naissance</th>
-                    <th scope="col" style="min-width: 7%">Option</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Poste</th>
+                    <th scope="col">Salaire</th>
+                    <th scope="col">Date de Naissance</th>
+                    <th scope="col">Option</th>
                 </tr>
             </thead>
+
             <tbody>
             {% for employe in employes %}
-                {% if id is defined and employe.id == id %}
+            {% if id is defined and employe.id == id %}
+
                 {# Changement de style pour la ligne en cours de modification avec option d'annulation #}
-                <tr class="text-center align-middle bg-success bg-gradient bg-opacity-50" id="{{ employe.id }}">
+                <tr class="text-center align-middle bg-success bg-gradient bg-opacity-25" id="{{ employe.id }}">
                     <td scope="row">{{ employe.id }}</td>
                     <td>{{ employe.prenom }}</td>
                     <td>{{ employe.nom }}</td>
+
                     {# Affichage du numéro de téléphone sous la forme "00 00 00 00 00" #}
-                    <td>{{ employe.telephone | slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                    {# Formatage du numéro pour à cause de l'insersion en base de données #}
+                    {% if employe.telephone| length < 100 %}
+                        <td>{{ "0" ~ employe.telephone| slice(0, 1) ~ " " ~ employe.telephone| slice(1, 2) ~ " " ~ employe.telephone| slice(3, 2) ~ " " ~ employe.telephone| slice(5, 2) ~ " " ~ employe.telephone| slice(7, 2) }}</td>
+                    {% else %}
+                        <td>{{ employe.telephone| slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                    {% endif %}
                     <td>{{ employe.email }}</td>
                     <td>{{ employe.adresse }}</td>
                     <td>{{ employe.poste }}</td>
                     <td>{{ employe.salaire }}</td>
+
                     {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
                     <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
                     <td>
-                        <a href="{{ path("home") }}#{{ id }}" class="btn btn-sm btn-success" title="Annuler modifications">
+                        <a href="{{ path("home") }}#{{ id }}" class="btn btn-sm btn-success opacity-75" title="Annuler modifications">
                             <i class="bi bi-x"></i>
                         </a>
                     </td>
                 </tr>
-                {% else %}
+            {% else %}
+
                 {# Style classique du tableau avec option modification et suppression #}
                 <tr class="text-center align-middle" id="{{ employe.id }}">
                     <td scope="row">{{ employe.id }}</td>
                     <td>{{ employe.prenom }}</td>
                     <td>{{ employe.nom }}</td>
+
                     {# Affichage du numéro de téléphone sous la forme "00 00 00 00 00" #}
-                    <td>{{ employe.telephone | slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                    {# Formatage du numéro pour à cause de l'insersion en base de données #}
+                    {% if employe.telephone| length == 9 %}
+                        <td>{{ "0" ~ employe.telephone| slice(0, 1) ~ " " ~ employe.telephone| slice(1, 2) ~ " " ~ employe.telephone| slice(3, 2) ~ " " ~ employe.telephone| slice(5, 2) ~ " " ~ employe.telephone| slice(7, 2) }}</td>
+                    {% else %}
+                        <td>{{ employe.telephone| slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
+                    {% endif %}
                     <td>{{ employe.email }}</td>
                     <td>{{ employe.adresse }}</td>
                     <td>{{ employe.poste }}</td>
                     <td>{{ employe.salaire }}</td>
+
                     {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
                     <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
                     <td>
-                        <a href="{{ path("update", {"id": employe.id}) }}#formulaire" class="btn btn-sm btn-warning text-dark" title="Modifier les informations de l'employé {{ employe.id }}">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <a href="{{ path("delete", {"id": employe.id}) }}" class="btn btn-sm btn-danger text-dark" title="Supprimer les informations de l'employé {{ employe.id }}">
-                            <i class="bi bi-trash"></i>
-                        </a>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ path("update", {"id": employe.id}) }}#formulaire" class="btn btn-warning text-dark" title="Modifier les informations de l'employé {{ employe.id }}">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{{ path("delete", {"id": employe.id}) }}" class="btn btn-sm btn-danger text-dark" title="Supprimer les informations de l'employé {{ employe.id }}">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
-                {% endif %}
+            {% endif %}
             {% else %}
-            {# Affichage en cas de liste d'employés vide #}
+
+                {# Affichage en cas de liste d'employés vide #}
                 <tr class="text-center align-middle">
                     <td colspan="10">Aucun employé pour l'instant</td>
                 </tr>
@@ -92,7 +111,8 @@
     </section>
 
     {# Barre de séparation #}
-    <hr class="w-25 mx-auto my-5 text-danger">
+    <hr
+    class="w-25 mx-auto my-5 text-danger">
 
     {# Sous-titre auto-modifié #}
     <h2 class="text-center mb-4 mt-5 pt-5 fw-semibold text-decoration-underline fs-4" id="formulaire">{{ id is defined ? "Modifier l'employé " ~ id : "Ajouter un employé" }}</h2>
@@ -122,7 +142,7 @@
                 {{ form_row(form.email) }}
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-12">
                 {{ form_row(form.adresse) }}
@@ -145,12 +165,23 @@
         </div>
         {{ form_end(form) }}
     </section>
-    <div class="position-fixed bottom-0 end-0 mb-3 me-3 opacity-75">
+
+    <div class="btn-group btn-group-sm position-fixed bottom-0 start-50 translate-middle-x mb-1 ">
     {% if id is defined %}
-        <a href="#formulaire" class="btn btn-sm btn-success rounded-circle" title="Retourner sur la modification du formulaire"><i class="bi bi-box-arrow-down"></i></a>
-        <a href="#{{ id }}" class="btn btn-sm btn-success rounded-circle" title="Voir ligne en cours de modification"><i class="bi bi-box-arrow-in-up"></i></a>
+    
+        {# Changement de style pour la ligne en cours de modification avec option d'annulation #}
+        <a href="#formulaire" class="btn btn-primary" title="Retourner sur la modification du formulaire">
+            <i class="bi bi-box-arrow-down"></i>
+        </a>
+        <a href="#{{ id }}" class="btn btn-secondary" title="Voir ligne en cours de modification">
+            <i class="bi bi-box-arrow-in-up"></i>
+        </a>
     {% endif %}
-        <a href="#top" class="btn btn-sm btn-info rounded-circle" title="Haut de la page"><i class="bi bi-arrow-bar-up"></i></a>
+    
+        {# Bouton de retour en haut de page #}
+        <a href="#top" class="btn btn-danger" title="Haut de la page">
+            <i class="bi bi-arrow-bar-up"></i>
+        </a>
     </div>
 </main>
 {% endblock %}

@@ -54,9 +54,10 @@ class Employes
     #[ORM\Column(type: 'string', length: 10, unique: true)]
     #[Assert\Regex(pattern: "/^[0-9]+$/")]
     #[Assert\Length(
-        min: 10,
+        min: 9,
         max: 10,
-        exactMessage: "Le numéro doit contenir {{ limit }} chiffres."
+        minMessage: "Le numéro de téléphone doit avoir au minimum {{ limit }} chiffres (0 de début, optionnel).",
+        maxMessage: "Le numéro de téléphone doit avoir au maximum {{ limit }} chiffres, commençant pad un 0."
     )]
     #[Assert\PositiveOrZero]
     #[Assert\LessThan(
