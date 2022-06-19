@@ -35,40 +35,18 @@
                 </tr>
             </thead>
 
+            {# Corps du tableau #}
             <tbody>
             {% for employe in employes %}
             {% if id is defined and employe.id == id %}
 
                 {# Changement de style pour la ligne en cours de modification avec option d'annulation #}
                 <tr class="text-center align-middle bg-success bg-gradient bg-opacity-25" id="{{ employe.id }}">
-                    <td scope="row">{{ employe.id }}</td>
-                    <td>{{ employe.prenom }}</td>
-                    <td>{{ employe.nom }}</td>
-
-                    {# Affichage du numéro de téléphone sous la forme "00 00 00 00 00" #}
-                    {# Formatage du numéro pour à cause de l'insersion en base de données #}
-                    {% if employe.telephone| length < 100 %}
-                        <td>{{ "0" ~ employe.telephone| slice(0, 1) ~ " " ~ employe.telephone| slice(1, 2) ~ " " ~ employe.telephone| slice(3, 2) ~ " " ~ employe.telephone| slice(5, 2) ~ " " ~ employe.telephone| slice(7, 2) }}</td>
-                    {% else %}
-                        <td>{{ employe.telephone| slice(0, 2) ~ " " ~ employe.telephone| slice(2, 2) ~ " " ~ employe.telephone| slice(4, 2) ~ " " ~ employe.telephone| slice(6, 2) ~ " " ~ employe.telephone| slice(8, 2) }}</td>
-                    {% endif %}
-                    <td>{{ employe.email }}</td>
-                    <td>{{ employe.adresse }}</td>
-                    <td>{{ employe.poste }}</td>
-                    <td>{{ employe.salaire }}</td>
-
-                    {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
-                    <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
-                    <td>
-                        <a href="{{ path("home") }}#{{ id }}" class="btn btn-sm btn-success opacity-75" title="Annuler modifications">
-                            <i class="bi bi-x"></i>
-                        </a>
-                    </td>
-                </tr>
             {% else %}
 
                 {# Style classique du tableau avec option modification et suppression #}
                 <tr class="text-center align-middle" id="{{ employe.id }}">
+            {% endif %}
                     <td scope="row">{{ employe.id }}</td>
                     <td>{{ employe.prenom }}</td>
                     <td>{{ employe.nom }}</td>
@@ -87,6 +65,19 @@
 
                     {# Affichage de la date de naissance sous la forme "dd/mm/yyyy" #}
                     <td>{{ employe.datedenaissance | date("d/m/Y") }}</td>
+
+                    {# Boutons option, en cas de modification #}
+                    {% if id is defined and employe.id == id %}
+
+                    {# Annulation de la modification #}
+                    <td>
+                        <a href="{{ path("home") }}#{{ id }}" class="btn btn-sm btn-success opacity-75" title="Annuler modifications">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </td>
+                    {% else %}
+
+                    {# Option de modification et suppression de la ligne #}
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{{ path("update", {"id": employe.id}) }}#formulaire" class="btn btn-warning text-dark" title="Modifier les informations de l'employé {{ employe.id }}">
@@ -97,8 +88,8 @@
                             </a>
                         </div>
                     </td>
+                    {% endif %}
                 </tr>
-            {% endif %}
             {% else %}
 
                 {# Affichage en cas de liste d'employés vide #}
@@ -168,7 +159,7 @@
 
     <div class="btn-group btn-group-sm position-fixed bottom-0 start-50 translate-middle-x mb-1 ">
     {% if id is defined %}
-    
+
         {# Changement de style pour la ligne en cours de modification avec option d'annulation #}
         <a href="#formulaire" class="btn btn-primary" title="Retourner sur la modification du formulaire">
             <i class="bi bi-box-arrow-down"></i>
@@ -177,7 +168,7 @@
             <i class="bi bi-box-arrow-in-up"></i>
         </a>
     {% endif %}
-    
+
         {# Bouton de retour en haut de page #}
         <a href="#top" class="btn btn-danger" title="Haut de la page">
             <i class="bi bi-arrow-bar-up"></i>
